@@ -1,18 +1,18 @@
 import requests
 import re
 
-pattern = r"<a href=(\"|\')([\w:\.\/]*)(\"|\')>[\w\sа-яА-Я]*?</a>"
+pattern = r"<a href=[\"|\']([\w:\.\/]*)[\"|\']>[\w\sа-яА-Я]*?</a>"
 
-#s = '<a href="http:\\\\www.google.com">Здрасте мордасте</a>'
+start_url = input()
+end_url = input()
 
-#gr = re.match(pattern, s)
-#print('1111')
-#print(gr.group(2))
-#print('2222')
+res = requests.get(start_url)
 
-res = requests.get("https://stepic.org/media/attachments/lesson/24472/sample0.html")
-print(res.status_code)
-print(res.content)
+gr = re.findall(pattern, str(res.content))
+for i in range(len(gr)):
+    res = requests.get(gr[i])
+    sec = re.findall(pattern, str(res.content))
+    if end_url in sec:
+        answer = 'Yes'
 
-gr = re.search(pattern, str(res.content))
-print(gr.group(2))
+print(answer)
